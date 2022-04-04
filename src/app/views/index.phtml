@@ -9,12 +9,29 @@
 
 <div class="container">
 <?php 
-echo $this->tag->linkTo(
-   [ 'login',
-    'Login Up Here!',
-    'class'=>'btn btn-outline-success my-2 my-sm-0']
-);
+  if (!$this->cookies->has("login-action"))
+  {
+    echo $this->tag->linkTo(
+        [ 'login',
+         'Login Up Here!',
+         'class'=>'btn btn-outline-success my-2 my-sm-0']
+     );
+  }
+  else{ 
+    $loginCookie = $this->cookies->get("login-action");
+    $value = json_decode($loginCookie->getValue());
+    echo "bearer=".$value->token;
+    echo "<br>";
+    echo $this->tag->linkTo(
+        [ 'index/logout',
+         'Log Out ',
+         'class'=>'btn btn-outline-success my-2 my-sm-0']
+     );
+  }
+
 ?>  
+
+
     <?php echo $this->getContent(); ?>
 </div>
 </body>

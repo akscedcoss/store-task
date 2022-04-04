@@ -6,6 +6,8 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Phalcon\Http\Response\Cookies;
 use \App\Components\myescaper;
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\Stream;
 class LoginController extends Controller
 {
     /**
@@ -45,6 +47,16 @@ class LoginController extends Controller
                 $response->setStatusCode(403, 'Not Found');
                 $response->setContent("Sorry, Authecation Failed");
                 $response->send();
+                // when Login Failed Log
+                $adapter = new Stream('../app/logs/signin.log');
+                $logger  = new Logger(
+                    'messages',
+                    [
+                        'main' => $adapter,
+                    ]
+                );
+    
+                $logger->error("Sorry, Login Failed");
                 die();
             }
             // Credentials are correct Genrate JWT token 

@@ -13,7 +13,9 @@ $config = new Config([]);
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
 // Application
-
+// Logger 
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\Stream;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));

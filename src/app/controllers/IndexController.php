@@ -10,4 +10,9 @@ class IndexController extends Controller
  
         // return '<h1>Hello World!</h1>';
     }
+    public function logOutAction()
+    {
+        $this->cookies->get('login-action')->delete();
+        return $this->response->redirect('/');
+    }
 }
