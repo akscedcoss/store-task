@@ -9,6 +9,11 @@ use Phalcon\Config;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 $config = new Config([]);
+// for events 
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
+// Application
+
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -24,8 +29,13 @@ $loader->registerDirs(
     ]
 );
 require_once(APP_PATH."/vendor/autoload.php");
+$loader->registerNamespaces(
+    [
+        'App\Components' =>  APP_PATH .'/components',
+        'App\Listener' =>APP_PATH .'/Listener'
+    ]
+);
 $loader->register();
-
 $container = new FactoryDefault();
 
 $container->set(
@@ -78,7 +88,25 @@ $container->set(
         return $cookies;
     }
 );
+// Container For cookies  End 
 
+
+// Event  Managment Start 
+$eventsManager = new EventsManager();
+$eventsManager->attach(
+    'notifications',
+    new App\Listener\NotificationsListener()
+);
+
+$eventsManager->attach(
+    'application:beforeHandleRequest',
+    new App\Listener\NotificationsListener()
+);
+// Set Event Manager 
+$application->setEventsManager($eventsManager);
+// Set container
+$container->set('eventsManager', $eventsManager);
+// Event Managment End 
 try {
     // Handle the request
     $response = $application->handle(

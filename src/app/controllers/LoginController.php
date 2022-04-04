@@ -65,7 +65,7 @@ class LoginController extends Controller
              );          
             // redirect to the dashboard 
             return $this->response->redirect('/');
-            die;
+        
         }
     }
 }
