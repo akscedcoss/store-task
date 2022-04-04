@@ -6,7 +6,8 @@ use Phalcon\Mvc\Application;
 use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
-
+use Phalcon\Http\Response;
+use Phalcon\Http\Response\Cookies;
 $config = new Config([]);
 
 // Define some absolute path constants to aid in locating resources
@@ -22,7 +23,7 @@ $loader->registerDirs(
         APP_PATH . "/models/",
     ]
 );
-
+require_once(APP_PATH."/vendor/autoload.php");
 $loader->register();
 
 $container = new FactoryDefault();
@@ -48,21 +49,35 @@ $container->set(
 $application = new Application($container);
 
 
-
+// Container For Db 
 $container->set(
     'db',
     function () {
         return new Mysql(
             [
-                'host'     => 'localhost',
+                'host'     => 'mysql-server',
                 'username' => 'root',
-                'password' => '',
+                'password' => 'secret',
                 'dbname'   => 'phalt',
                 ]
             );
         }
 );
+//  Container For cookies 
+$container->set(
+    'cookies',
+    function () {
+        $response = new Response();
+        $signKey  = "#1dj8$=dp?.ak//j1V$~%*0XaK\xb1\x8d\xa9\x98\x054t7w!z%C*F-Jk\x98\x05\\\x5c";
 
+        $cookies  = new Cookies();
+
+        $cookies->setSignKey($signKey);
+
+        $response->setCookies($cookies);
+        return $cookies;
+    }
+);
 
 try {
     // Handle the request
