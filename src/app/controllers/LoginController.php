@@ -5,7 +5,7 @@ use Phalcon\Http\Response;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Phalcon\Http\Response\Cookies;
-
+use \App\Components\myescaper;
 class LoginController extends Controller
 {
     /**
@@ -17,15 +17,16 @@ class LoginController extends Controller
     public function indexAction()
     {
         // Check if cookie avialble
-
+       
         // If Post Request process the form 
         // Step 1. Authorize the User 
         // Step 2. Genrate  Jwt token For the user 
         // Step 3. Store Token in the Cookie .
         if ($this->request->isPost()) {
+            $helper= new myescaper();
             $user = new Users();
             $user->assign(
-                $this->request->getPost(),
+                $helper->sanitizeArray($this->request->getPost()),
                 [
                     'email',
                     'password'

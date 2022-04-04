@@ -30,7 +30,7 @@ $loader->registerDirs(
 );
 require_once(APP_PATH."/vendor/autoload.php");
 $loader->registerNamespaces(
-    [
+    [  
         'App\Components' =>  APP_PATH .'/components',
         'App\Listener' =>APP_PATH .'/Listener'
     ]

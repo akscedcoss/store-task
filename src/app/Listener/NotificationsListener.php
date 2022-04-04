@@ -32,7 +32,7 @@ class NotificationsListener extends Injectable
           $role=$decoded->role_type;
           echo $role;
           // die;
-          // Implement ACL here 
+          // Implement ACL here //////////////////////////
         }
         catch(\Exception $e)
         {
